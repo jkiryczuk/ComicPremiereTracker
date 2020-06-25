@@ -1,6 +1,7 @@
 package pl.jkir.comicpremieretracker.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_main.*
 import pl.jkir.comicpremieretracker.R
+import pl.jkir.comicpremieretracker.data.Comic
+import pl.jkir.comicpremieretracker.data.ComicResponse
 
 /**
  * A placeholder fragment containing a simple view.
@@ -17,11 +20,25 @@ import pl.jkir.comicpremieretracker.R
 class PlaceholderFragment : Fragment() {
 
     private lateinit var viewModel: PageViewModel
+    private lateinit var comicsAdapter: PremiereListAdapter
+    private var comics = ArrayList<Comic>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(PageViewModel::class.java)
-        viewModel.setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
+        defineObserver(viewModel)
+    }
+
+    private fun defineObserver(viewModel: PageViewModel) {
+        viewModel.getList().observe(this, Observer<ComicResponse> {
+            if (!it.comics.isNullOrEmpty()) {
+                Log.d(javaClass.name, "Data Changed")
+                comics = it.comics
+                comicsAdapter.setItems(comics)
+            } else {
+                Log.e(javaClass.name, "Null")
+            }
+        })
     }
 
     override fun onCreateView(
@@ -29,17 +46,18 @@ class PlaceholderFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_main, container, false)
-        viewModel.text.observe(viewLifecycleOwner, Observer<String> {
-        })
         return root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        comicsAdapter = PremiereListAdapter(comics)
         premiere_list.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = PremiereListAdapter(viewModel.getMockup())
+            adapter = comicsAdapter
         }
+        viewModel.callApi()
     }
 
     companion object {

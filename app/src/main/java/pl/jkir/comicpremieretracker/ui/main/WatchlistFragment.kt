@@ -26,7 +26,7 @@ class WatchlistFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-         viewModel = ViewModelProvider(this).get(WatchlistViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(WatchlistViewModel::class.java)
         watchlistmessage.text = viewModel.getMessage()
     }
 

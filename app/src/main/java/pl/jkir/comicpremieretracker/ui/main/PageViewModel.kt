@@ -1,35 +1,55 @@
 package pl.jkir.comicpremieretracker.ui.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import pl.jkir.comicpremieretracker.data.Comic
+import pl.jkir.comicpremieretracker.data.ComicResponse
+import pl.jkir.comicpremieretracker.utils.ShortBoxApiService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.logging.Logger
+import kotlin.math.log
 
 class PageViewModel : ViewModel() {
 
-    private val mockupComicList = listOf(
-        Comic("Batman"),
-        Comic("Spiderman"),
-        Comic("Justice League"),
-        Comic("Avengers"),
-        Comic("X-Men"),
-        Comic("Green Arrow"),
-        Comic("Smurfs"),
-        Comic("Fables")
-    )
+    private val failureMessage = "Failure to connect in fetchDataMethod()"
+    private val emptyResponseMessage = "Empty response in fetchDataMethod()"
+    private val nullResponseContentMessage = "Null response in fetchDataMethod()"
+    private var comicBookList = MutableLiveData<ComicResponse>()
 
-    private val _index = MutableLiveData<Int>()
-    val text: LiveData<String> = Transformations.map(_index) {
-        "Hello world from section: $it"
+    fun getList(): MutableLiveData<ComicResponse> {
+        return comicBookList
     }
 
-    fun setIndex(index: Int) {
-        _index.value = index
+    private fun fetchData() {
+        val shortBoxApiService = ShortBoxApiService.Factory.create()
+        val call = shortBoxApiService.getNew()
+        call.enqueue(object : Callback<ComicResponse> {
+            override fun onFailure(call: Call<ComicResponse>, t: Throwable) {
+                Log.e(javaClass.name, failureMessage, t.cause)
+            }
+
+            override fun onResponse(call: Call<ComicResponse>, response: Response<ComicResponse>) {
+                if (response.body() == null) {
+                    Log.e(javaClass.name, emptyResponseMessage)
+                } else if (response.body()!!.comics.isNullOrEmpty()) {
+                    Log.e(javaClass.name, nullResponseContentMessage)
+                } else {
+                    Log.d(javaClass.name, response.body().toString())
+                    comicBookList.value = response.body()!!
+                }
+            }
+
+        })
     }
 
-    fun getMockup(): List<Comic> {
-        return mockupComicList
+    fun callApi() {
+        this.fetchData()
     }
+
 }
