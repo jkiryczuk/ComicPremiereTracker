@@ -1,4 +1,4 @@
-package pl.jkir.comicpremieretracker.ui.main
+package pl.jkir.comicpremieretracker.ui.main.watchlist
 
 import androidx.lifecycle.ViewModel
 

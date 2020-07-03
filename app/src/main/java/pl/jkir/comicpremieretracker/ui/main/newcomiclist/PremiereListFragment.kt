@@ -1,4 +1,4 @@
-package pl.jkir.comicpremieretracker.ui.main
+package pl.jkir.comicpremieretracker.ui.main.newcomiclist
 
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +17,7 @@ import pl.jkir.comicpremieretracker.data.ComicResponse
 /**
  * A placeholder fragment containing a simple view.
  */
-class PlaceholderFragment : Fragment() {
+class PremiereListFragment : Fragment() {
 
     private lateinit var viewModel: PageViewModel
     private lateinit var comicsAdapter: PremiereListAdapter
@@ -52,7 +52,10 @@ class PlaceholderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        comicsAdapter = PremiereListAdapter(comics)
+        comicsAdapter =
+            PremiereListAdapter(
+                comics
+            )
         premiere_list.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = comicsAdapter
@@ -64,8 +67,9 @@ class PlaceholderFragment : Fragment() {
         private const val ARG_SECTION_NUMBER = "section_number"
 
         @JvmStatic
-        fun newInstance(sectionNumber: Int): PlaceholderFragment {
-            return PlaceholderFragment().apply {
+        fun newInstance(sectionNumber: Int): PremiereListFragment {
+            return PremiereListFragment()
+                .apply {
                 arguments = Bundle().apply {
                     putInt(ARG_SECTION_NUMBER, sectionNumber)
                 }

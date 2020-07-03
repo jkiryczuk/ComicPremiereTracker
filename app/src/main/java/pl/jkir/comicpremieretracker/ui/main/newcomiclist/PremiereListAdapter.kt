@@ -1,15 +1,18 @@
-package pl.jkir.comicpremieretracker.ui.main
+package pl.jkir.comicpremieretracker.ui.main.newcomiclist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import pl.jkir.comicpremieretracker.data.Comic
-import pl.jkir.comicpremieretracker.ui.main.ComicViewHolder
+import pl.jkir.comicpremieretracker.ui.main.newcomiclist.ComicViewHolder
 
 class PremiereListAdapter(private var list: ArrayList<Comic>) : RecyclerView.Adapter<ComicViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComicViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return ComicViewHolder(inflater, parent)
+        return ComicViewHolder(
+            inflater,
+            parent
+        )
     }
 
     override fun getItemCount(): Int = list.size

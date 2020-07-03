@@ -1,4 +1,4 @@
-package pl.jkir.comicpremieretracker.ui.main
+package pl.jkir.comicpremieretracker.ui.main.watchlist
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,7 +12,8 @@ import pl.jkir.comicpremieretracker.R
 class WatchlistFragment : Fragment() {
 
     companion object {
-        fun newInstance() = WatchlistFragment()
+        fun newInstance() =
+            WatchlistFragment()
     }
 
     private lateinit var viewModel: WatchlistViewModel
