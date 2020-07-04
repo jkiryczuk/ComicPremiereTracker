@@ -11,7 +11,8 @@ class PremiereListAdapter(private var list: ArrayList<Comic>) : RecyclerView.Ada
         val inflater = LayoutInflater.from(parent.context)
         return ComicViewHolder(
             inflater,
-            parent
+            parent,
+            parent.context
         )
     }
 

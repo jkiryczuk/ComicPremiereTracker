@@ -1,5 +1,6 @@
 package pl.jkir.comicpremieretracker.ui.main.newcomiclist
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,6 +23,8 @@ class PremiereListFragment : Fragment() {
     private lateinit var viewModel: PageViewModel
     private lateinit var comicsAdapter: PremiereListAdapter
     private var comics = ArrayList<Comic>()
+    private val dataChangedMessage= "Data Changed"
+    private val nullMessage = "Null"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,11 +35,11 @@ class PremiereListFragment : Fragment() {
     private fun defineObserver(viewModel: PageViewModel) {
         viewModel.getList().observe(this, Observer<ComicResponse> {
             if (!it.comics.isNullOrEmpty()) {
-                Log.d(javaClass.name, "Data Changed")
+                Log.d(javaClass.name, dataChangedMessage)
                 comics = it.comics
                 comicsAdapter.setItems(comics)
             } else {
-                Log.e(javaClass.name, "Null")
+                Log.e(javaClass.name, nullMessage)
             }
         })
     }
@@ -61,6 +64,10 @@ class PremiereListFragment : Fragment() {
             adapter = comicsAdapter
         }
         viewModel.callApi()
+    }
+
+    public override fun getContext(): Context? {
+        return super.getContext()
     }
 
     companion object {
